@@ -1,0 +1,47 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: opentelemetry-operator
+  name: my-otel-collector
+spec:
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+      zipkin:
+
+    processors:
+
+    exporters:
+      otlphttp:
+        endpoint: "https://XXXXXX.live.dynatrace.com/api/v2/otlp"
+        headers:
+          Authorization: "Api-Token YOUR_API_TOKEN_MUST_BE_SET_HERE"
+      jaeger:
+        endpoint: jaeger-all-in-one-inmemory-collector-headless.myapp.svc.cluster.local:14250
+        tls:
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+      logging:
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp, zipkin]
+          processors: []
+          exporters: [otlphttp, jaeger, logging]
+        metrics:
+          receivers: [otlp]
+          processors: []
+          exporters: [otlphttp]
+  mode: deployment
+  resources: {}
+  upgradeStrategy: automatic
+  ingress:
+    route: {}
+
+  targetAllocator:
+    prometheusCR: {}
+  replicas: 1
