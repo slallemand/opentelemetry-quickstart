@@ -35,4 +35,5 @@ public class TracedResource {
         LOG.info("hello/sebastien");
         return "hello sebastien !";
     }
+
 }

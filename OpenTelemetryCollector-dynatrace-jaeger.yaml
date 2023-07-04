@@ -3,7 +3,7 @@ kind: OpenTelemetryCollector
 metadata:
   labels:
     app.kubernetes.io/managed-by: opentelemetry-operator
-  name: my-otel-collector
+  name: my-otel
 spec:
   config: |
     receivers:
@@ -21,7 +21,7 @@ spec:
         headers:
           Authorization: "Api-Token YOUR_API_TOKEN_MUST_BE_SET_HERE"
       jaeger:
-        endpoint: jaeger-all-in-one-inmemory-collector-headless.myapp.svc.cluster.local:14250
+        endpoint: jaeger-all-in-one-inmemory-collector-headless.my-app.svc.cluster.local:14250
         tls:
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
       logging:
